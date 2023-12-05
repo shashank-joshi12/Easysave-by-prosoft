@@ -51,6 +51,7 @@ namespace Easysave_v1._0_by_prosoft
 
 
 
+
         }
         public void setController(IController cont)
         {
