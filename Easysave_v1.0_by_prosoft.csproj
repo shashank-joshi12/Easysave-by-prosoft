@@ -6,4 +6,8 @@
     <RootNamespace>Easysave_v1._0_by_prosoft</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
 </Project>

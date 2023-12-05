@@ -1,23 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Diagnostics;
+using Newtonsoft.Json;
+using Easysave_v1._0_by_prosoft.model;
+using Easysave_v1._0_by_prosoft.view;
 
-namespace Easysave_v1._0_by_prosoft
+namespace Easysave_v1._0_by_prosoft.controller
 {
     class Controller : IController
     {
         private Model model;
         private View view;
+        private int inputMenu;
         public Controller()
         {
             model = new Model();
             view = new View();
-            view.setController(this);
-            view.RunBackup();
+            view.RunStart(); 
+            model.userMenuInput = Menu();
         }
-        public void Backup()
+        private string Menu()
         {
-
+            return 
 
         }
 
