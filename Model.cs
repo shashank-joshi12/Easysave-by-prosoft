@@ -31,26 +31,7 @@ namespace Easysave_v1._0_by_prosoft.model
                 
         public void RunBackupJob(string source, string target, bool type)
         {
-            var files = Directory.GetFiles(source);
-            var directories = Directory.GetDirectories(source);
-
             
-            foreach (var file in files)
-            {
-                string fileName = Path.GetFileName(file); 
-                string destFile = Path.Combine(target, fileName); 
-                File.Copy(file, destFile, type); 
-            }
-                   
-
-            foreach (var directory in directories)
-            {
-                string dirName = Path.GetFileName(directory); 
-                string destDir = Path.Combine(target, dirName); 
-                RunBackupJob(directory, destDir, type); 
-            }
-
-
         }
         public void DelExistingBackup()
         {
