@@ -10,7 +10,7 @@ namespace Easysave_v1._0_by_prosoft.view
         private string sourcepath;
         private string targetpath;
         private string type;
-        private string languagePreference;
+        public string languagePreference;
        
         
         public void RunStart()

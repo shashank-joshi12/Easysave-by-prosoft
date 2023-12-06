@@ -100,6 +100,10 @@ namespace Easysave_v1._0_by_prosoft.controller
                             else
                             {
                                 Console.Clear(); //Console cleaning
+                                if (view.languagePreference == "E")
+                                {
+
+                                }
                                 view.ShowError("Maximum number of backup jobs reached"); // Show Error Message
                             }
 
