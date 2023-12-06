@@ -111,7 +111,7 @@ namespace Easysave_v1._0_by_prosoft.model
                 DataState.FileRest = nbfilesmax - nbfiles;
                 DataState.Progress = progs;
 
-                UpdateStatefile(); //call to update or start the file status system
+                UpdateBackupStatus(); //call to update or start the file status system
 
                 file.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
                 nbfiles++;
@@ -139,7 +139,7 @@ namespace Easysave_v1._0_by_prosoft.model
             DataState.Progress = 0;
             DataState.SaveState = false;
 
-            UpdateStatefile(); //call to update or start the file status system
+            UpdateBackupStatus(); //call to update or start the file status system
 
             stopwatch.Stop(); //Stop the stopwatch
             this.TimeTaken = stopwatch.Elapsed;
@@ -189,7 +189,7 @@ namespace Easysave_v1._0_by_prosoft.model
                 DataState.FileRest = nbfilesmax - nbfiles;
                 DataState.Progress = progs;
 
-                UpdateStatefile();//call to update or start the file status system
+                UpdateBackupStatus();//call to update or start the file status system
                 v.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
                 size += v.Length;
                 nbfiles++;
@@ -204,12 +204,12 @@ namespace Easysave_v1._0_by_prosoft.model
             DataState.FileRest = 0;
             DataState.Progress = 0;
             DataState.SaveState = false;
-            //UpdateStatefile();//call to update or start the file status system
+            UpdateBackupStatus();//call to update or start the file status system
 
             stopwatch.Stop(); //Stop the stopwatch
             this.TimeTaken = stopwatch.Elapsed; // Transfer of the chrono time to the variable
         }
-        private void UpdateStatefile()//Function that updates the status json file.
+        private void UpdateBackupStatus()//Function that updates the status json file.
         {
             List<DataState> stateList = new List<DataState>();//creating list of type DataState
             this.serializeObj = null;
@@ -245,7 +245,7 @@ namespace Easysave_v1._0_by_prosoft.model
 
                 this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Formatting.Indented) + Environment.NewLine;
 
-                File.WriteAllText(backupStatusFile, this.serializeObj);
+                File.WriteAllText(backupStatusFile, this.serializeObj);//writing into the json file in json format
             }
 
         }
@@ -272,6 +272,7 @@ namespace Easysave_v1._0_by_prosoft.model
 
             stopwatch.Reset(); //resetting the stopwatch
         }
+
 
 
 
