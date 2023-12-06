@@ -11,8 +11,8 @@ namespace Easysave_v1._0_by_prosoft.model
     {
         public int checkdatabackup;
         private string serializeObj;
-        public string backupListFile = System.Environment.CurrentDirectory + @"\Works\";
-        public string stateFile = System.Environment.CurrentDirectory + @"\State\";
+        public string backupJobsFile = System.Environment.CurrentDirectory + @"\BackupJobs\";
+        public string backupStatusFile = System.Environment.CurrentDirectory + @"\BackupStatus\";
         public DataState DataState { get; set; }
         public string NameStateFile { get; set; }
         public string BackupNameState { get; set; }
@@ -27,7 +27,7 @@ namespace Easysave_v1._0_by_prosoft.model
         public string SourceFile { get; set; }
         public string TypeString { get; set; }
         public long TotalSize { get; set; }
-        public TimeSpan TimeTransfert { get; set; }
+        public TimeSpan TimeTaken { get; set; }
         public string UserMenuInput { get; set; }
         public string MirrorDir { get; set; }
 
@@ -36,17 +36,17 @@ namespace Easysave_v1._0_by_prosoft.model
         {
             UserMenuInput = " ";
 
-            if (!Directory.Exists(backupListFile)) //checking if directory already exists
+            if (Directory.Exists(backupJobsFile) != true) //checking if directory already exists
             {
-                DirectoryInfo Dir = Directory.CreateDirectory(backupListFile); //if directory doesn't exist then create new directory
+                DirectoryInfo Dir = Directory.CreateDirectory(backupJobsFile); //if directory doesn't exist then create new directory
             }
-            backupListFile += @"backupList.json"; //create or append to JSON log
+            backupJobsFile += @"backupJobs.json"; //create or append to JSON log
 
-            if (!Directory.Exists(stateFile))//checking is directory already exists
+            if (Directory.Exists(backupStatusFile) != true)//checking is directory already exists
             {
-                DirectoryInfo Dir = Directory.CreateDirectory(stateFile); //if not create a new directory
+                DirectoryInfo Dir = Directory.CreateDirectory(backupStatusFile); //
             }
-            stateFile += @"state.json"; //create or append to JSON log
+            backupStatusFile += @"backupStatus.json"; //create a json file 
 
 
         }
@@ -142,7 +142,7 @@ namespace Easysave_v1._0_by_prosoft.model
             UpdateStatefile(); //call to update or start the file status system
 
             stopwatch.Stop(); //Stop the stopwatch
-            this.TimeTransfert = stopwatch.Elapsed;
+            this.TimeTaken = stopwatch.Elapsed;
         }
         public void DifferentialBackup(string srcPath, string tgtPath, string tgtPathM) // Function that allows you to make a differential backup
         {
@@ -164,12 +164,12 @@ namespace Easysave_v1._0_by_prosoft.model
             //instantiate an object of comparator
             FileCompare myFileCompare = new FileCompare();
 
-            var queryList1Only = (from file in list1 select file).Except(list2, myFileCompare);
+            var List1Only = (from file in list1 select file).Except(list2, myFileCompare);
             size = 0;
             nbfiles = 0;
             progs = 0;
 
-            foreach (var v in queryList1Only)
+            foreach (var v in List1Only)
             {
                 TotalSize += v.Length;
                 nbfilesmax++;
@@ -177,7 +177,7 @@ namespace Easysave_v1._0_by_prosoft.model
             }
 
             //Loop that allows the backup of different files
-            foreach (var v in queryList1Only)
+            foreach (var v in List1Only)
             {
                 string tempPath = Path.Combine(tgtPathM, v.Name);
                 //Systems which allows to insert the values ​​of each file in the report file.
@@ -204,21 +204,21 @@ namespace Easysave_v1._0_by_prosoft.model
             DataState.FileRest = 0;
             DataState.Progress = 0;
             DataState.SaveState = false;
-            UpdateStatefile();//call to update or start the file status system
+            //UpdateStatefile();//call to update or start the file status system
 
             stopwatch.Stop(); //Stop the stopwatch
-            this.TimeTransfert = stopwatch.Elapsed; // Transfer of the chrono time to the variable
+            this.TimeTaken = stopwatch.Elapsed; // Transfer of the chrono time to the variable
         }
-        private void UpdateStatefile()//Function that updates the status file.
+        private void UpdateStatefile()//Function that updates the status json file.
         {
             List<DataState> stateList = new List<DataState>();//creating list of type DataState
             this.serializeObj = null;
-            if (!File.Exists(stateFile)) //Checking if the file exists
+            if (!File.Exists(backupStatusFile)) //Checking if the file exists
             {
-                File.Create(stateFile).Close();
+                File.Create(backupStatusFile).Close();
             }
 
-            string jsonString = File.ReadAllText(stateFile);  //Reading the json file
+            string jsonString = File.ReadAllText(backupStatusFile);  //Reading the json file
 
             if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
             {
@@ -243,16 +243,16 @@ namespace Easysave_v1._0_by_prosoft.model
 
                 }
 
-                this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+                this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Formatting.Indented) + Environment.NewLine;
 
-                File.WriteAllText(stateFile, this.serializeObj); //Predefined Function to write to JSON file
+                File.WriteAllText(backupStatusFile, this.serializeObj);
             }
 
         }
         public void UpdateLogFile(string savename, string sourcedir, string targetdir)//Function to allow modification of the log file
         {
             Stopwatch stopwatch = new Stopwatch();
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTransfert.Hours, TimeTransfert.Minutes, TimeTransfert.Seconds, TimeTransfert.Milliseconds / 10); //Formatting the stopwatch for better visibility in the file
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTaken.Hours, TimeTaken.Minutes, TimeTaken.Seconds, TimeTaken.Milliseconds / 10); //for display
 
             Logstats logstats = new Logstats //Apply the retrieved values ​​to their classes
             {
@@ -264,14 +264,15 @@ namespace Easysave_v1._0_by_prosoft.model
                 TransactionTime = elapsedTime
             };
 
-            string path = System.Environment.CurrentDirectory; //Allows you to retrieve the path of the program environment
-            var directory = System.IO.Path.GetDirectoryName(path); // This file saves in the project: \EasySaveApp\bin
+            string path = System.Environment.CurrentDirectory; 
+            var directory = System.IO.Path.GetDirectoryName(path); 
 
             string serializeObj = JsonConvert.SerializeObject(logstats, Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
             File.AppendAllText(directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".json", serializeObj); //Function to write to log file
 
-            stopwatch.Reset(); // Reset of stopwatch
+            stopwatch.Reset(); //resetting the stopwatch
         }
+
 
 
     }

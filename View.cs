@@ -11,7 +11,7 @@ namespace Easysave_v1._0_by_prosoft.view
         private string targetpath;
         private string type;
         private string languagePreference;
-        private IController controller;
+       
         
         public void RunStart()
         {
@@ -144,10 +144,7 @@ namespace Easysave_v1._0_by_prosoft.view
 
             }
         }
-        public void setController(IController cont)
-        {
-            controller = cont;
-        }
+       
     }
 
 }

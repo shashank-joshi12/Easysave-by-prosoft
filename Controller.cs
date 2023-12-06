@@ -17,7 +17,7 @@ namespace Easysave_v1._0_by_prosoft.controller
             model = new Model();
             view = new View();
             view.RunStart(); 
-            model.userMenuInput = Menu();
+            model.UserMenuInput = Menu();
         }
         private string GetSourcePath() //to get source path
         {
@@ -53,17 +53,13 @@ namespace Easysave_v1._0_by_prosoft.controller
                 }
                 else
                 {
-                    view.ShowError("Incorect Path"); //show error is path invalid
+                    view.ShowError("Incorect Path"); //show error if path invalid
                 }
 
             }
             return targetPath;
         }
-        private string Menu()
-        {
-            return 
-
-        }
+        
 
     }
 }
