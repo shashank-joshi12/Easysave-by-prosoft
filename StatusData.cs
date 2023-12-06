@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Easysave_v1._0_by_prosoft.model
 {
-    class DataState
+    class StatusData
     {
         // Declaring properties that are used for saving information for the report file in JSON
         public string SaveName { get; set; }
@@ -18,7 +18,7 @@ namespace Easysave_v1._0_by_prosoft.model
         public long FileRest { get; set; }
         public long TotalSizeRest { get; set; }
 
-        public DataState(string saveName)
+        public StatusData(string saveName)
         {
             SaveName = saveName;
         }

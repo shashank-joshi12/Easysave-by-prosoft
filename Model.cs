@@ -13,7 +13,7 @@ namespace Easysave_v1._0_by_prosoft.model
         private string serializeObj;
         public string backupJobsFile = System.Environment.CurrentDirectory + @"\BackupJobs\";
         public string backupStatusFile = System.Environment.CurrentDirectory + @"\BackupStatus\";
-        public DataState DataState { get; set; }
+        public StatusData statusData { get; set; }
         public string NameStateFile { get; set; }
         public string BackupNameState { get; set; }
         public string SourcePath { get; set; }
@@ -52,8 +52,8 @@ namespace Easysave_v1._0_by_prosoft.model
         }
         public void FullBackup(string srcPath, string tgtPath, bool copyDir, bool verif) //Function for full backup (CompleteSave)
         {
-            DataState = new DataState(NameStateFile);
-            this.DataState.SaveState = true;//telling that the state of this backup is saved
+            statusData = new StatusData(NameStateFile);
+            this.statusData.SaveState = true;//telling that the state of this backup is saved
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start(); //Starting the timer for the log file
 
@@ -103,13 +103,13 @@ namespace Easysave_v1._0_by_prosoft.model
                 }
 
                 //Systems which allows to insert the values ​​of each file in the report file.
-                DataState.SourceFile = Path.Combine(srcPath, file.Name);
-                DataState.TargetFile = tempPath;
-                DataState.TotalSize = nbfilesmax;
-                DataState.TotalFile = TotalSize;
-                DataState.TotalSizeRest = TotalSize - size;
-                DataState.FileRest = nbfilesmax - nbfiles;
-                DataState.Progress = progs;
+                statusData.SourceFile = Path.Combine(srcPath, file.Name);
+                statusData.TargetFile = tempPath;
+                statusData.TotalSize = nbfilesmax;
+                statusData.TotalFile = TotalSize;
+                statusData.TotalSizeRest = TotalSize - size;
+                statusData.FileRest = nbfilesmax - nbfiles;
+                statusData.Progress = progs;
 
                 UpdateBackupStatus(); //call to update or start the file status system
 
@@ -129,15 +129,15 @@ namespace Easysave_v1._0_by_prosoft.model
                 }
             }
             //reset backup status at the end of backup
-            DataState.TotalSize = TotalSize;
-            DataState.SourceFile = null;
-            DataState.TargetFile = null;
-            DataState.TotalFile = 0;
-            DataState.TotalSize = 0;
-            DataState.TotalSizeRest = 0;
-            DataState.FileRest = 0;
-            DataState.Progress = 0;
-            DataState.SaveState = false;
+            statusData.TotalSize = TotalSize;
+            statusData.SourceFile = null;
+            statusData.TargetFile = null;
+            statusData.TotalFile = 0;
+            statusData.TotalSize = 0;
+            statusData.TotalSizeRest = 0;
+            statusData.FileRest = 0;
+            statusData.Progress = 0;
+            statusData.SaveState = false;
 
             UpdateBackupStatus(); //call to update or start the file status system
 
@@ -146,11 +146,11 @@ namespace Easysave_v1._0_by_prosoft.model
         }
         public void DifferentialBackup(string srcPath, string tgtPath, string tgtPathM) // Function that allows you to make a differential backup
         {
-            DataState = new DataState(NameStateFile); // instantiating an object for class describing the state of backup
+            statusData = new StatusData(NameStateFile); // instantiating an object for class describing the state of backup
             Stopwatch stopwatch = new Stopwatch(); 
             stopwatch.Start(); //Starting the stopwatch
 
-            DataState.SaveState = true;
+            statusData.SaveState = true;
             TotalSize = 0;
             nbfilesmax = 0;
 
@@ -181,13 +181,13 @@ namespace Easysave_v1._0_by_prosoft.model
             {
                 string tempPath = Path.Combine(tgtPathM, v.Name);
                 //Systems which allows to insert the values ​​of each file in the report file.
-                DataState.SourceFile = Path.Combine(srcPath, v.Name);
-                DataState.TargetFile = tempPath;
-                DataState.TotalSize = nbfilesmax;
-                DataState.TotalFile = TotalSize;
-                DataState.TotalSizeRest = TotalSize - size;
-                DataState.FileRest = nbfilesmax - nbfiles;
-                DataState.Progress = progs;
+                statusData.SourceFile = Path.Combine(srcPath, v.Name);
+                statusData.TargetFile = tempPath;
+                statusData.TotalSize = nbfilesmax;
+                statusData.TotalFile = TotalSize;
+                statusData.TotalSizeRest = TotalSize - size;
+                statusData.FileRest = nbfilesmax - nbfiles;
+                statusData.Progress = progs;
 
                 UpdateBackupStatus();//call to update or start the file status system
                 v.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
@@ -196,14 +196,14 @@ namespace Easysave_v1._0_by_prosoft.model
             }
 
             //to reset backup status after the end of backup
-            DataState.SourceFile = null;
-            DataState.TargetFile = null;
-            DataState.TotalFile = 0;
-            DataState.TotalSize = 0;
-            DataState.TotalSizeRest = 0;
-            DataState.FileRest = 0;
-            DataState.Progress = 0;
-            DataState.SaveState = false;
+            statusData.SourceFile = null;
+            statusData.TargetFile = null;
+            statusData.TotalFile = 0;
+            statusData.TotalSize = 0;
+            statusData.TotalSizeRest = 0;
+            statusData.FileRest = 0;
+            statusData.Progress = 0;
+            statusData.SaveState = false;
             UpdateBackupStatus();//call to update or start the file status system
 
             stopwatch.Stop(); //Stop the stopwatch
@@ -211,7 +211,7 @@ namespace Easysave_v1._0_by_prosoft.model
         }
         private void UpdateBackupStatus()//Function that updates the status json file.
         {
-            List<DataState> stateList = new List<DataState>();//creating list of type DataState
+            List<StatusData> stateList = new List<StatusData>();//creating list of type DataState
             this.serializeObj = null;
             if (!File.Exists(backupStatusFile)) //Checking if the file exists
             {
@@ -222,21 +222,21 @@ namespace Easysave_v1._0_by_prosoft.model
 
             if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
             {
-                DataState[] list = JsonConvert.DeserializeObject<DataState[]>(jsonString); //Dserialization of the json file
+                StatusData[] list = JsonConvert.DeserializeObject<StatusData[]>(jsonString); //Dserialization of the json file
 
                 foreach (var obj in list) // Loop to allow filling of the JSON file
                 {
                     if (obj.SaveName == this.NameStateFile) // comparing names to verify current and existing backup
                     {
-                        obj.SourceFile = this.DataState.SourceFile;
-                        obj.TargetFile = this.DataState.TargetFile;
-                        obj.TotalFile = this.DataState.TotalFile;
-                        obj.TotalSize = this.DataState.TotalSize;
-                        obj.FileRest = this.DataState.FileRest;
-                        obj.TotalSizeRest = this.DataState.TotalSizeRest;
-                        obj.Progress = this.DataState.Progress;
+                        obj.SourceFile = this.statusData.SourceFile;
+                        obj.TargetFile = this.statusData.TargetFile;
+                        obj.TotalFile = this.statusData.TotalFile;
+                        obj.TotalSize = this.statusData.TotalSize;
+                        obj.FileRest = this.statusData.FileRest;
+                        obj.TotalSizeRest = this.statusData.TotalSizeRest;
+                        obj.Progress = this.statusData.Progress;
                         obj.BackupDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-                        obj.SaveState = this.DataState.SaveState;
+                        obj.SaveState = this.statusData.SaveState;
                     }
 
                     stateList.Add(obj); //adds the object to the list of type DataState
@@ -274,6 +274,65 @@ namespace Easysave_v1._0_by_prosoft.model
         }
 
 
+
+        public void AddSave(BackupJob backup) //Function that creates a backup job
+        {
+            List<BackupJob> backupList = new List<BackupJob>();
+            this.serializeObj = null;
+
+            if (!File.Exists(backupJobsFile)) //Checking if the file exists
+            {
+                File.WriteAllText(backupJobsFile, this.serializeObj);
+            }
+
+            string jsonString = File.ReadAllText(backupJobsFile); //Reading the json file
+
+            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
+            {
+                BackupJob[] list = JsonConvert.DeserializeObject<BackupJob[]>(jsonString); //Derialization of the json file
+                foreach (var obj in list) //Loop to add the information in the json
+                {
+                    backupList.Add(obj);
+                }
+            }
+            backupList.Add(backup); //Allows you to prepare the objects for the json filling
+
+            this.serializeObj = JsonConvert.SerializeObject(backupList.ToArray(), Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+            File.WriteAllText(backupJobsFile, this.serializeObj); // Writing to the json file
+
+            statusData = new StatusData(this.SaveName); //Class initiation
+
+            statusData.BackupDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"); //Adding the time in the variable
+            AddState(); //Call of the function to add the backup in the report file.
+        }
+        public void AddState() //Function that allows you to add a backup job to the report file.
+        {
+            List<StatusData> stateList = new List<StatusData>();
+            this.serializeObj = null;
+
+            if (!File.Exists(backupStatusFile)) //Checking if the file exists
+            {
+                File.Create(backupStatusFile).Close();
+            }
+
+            string jsonString = File.ReadAllText(backupStatusFile); //Reading the json file
+
+            if (jsonString.Length != 0)
+            {
+                StatusData[] list = JsonConvert.DeserializeObject<StatusData[]>(jsonString); //Derialization of the json file
+                foreach (var obj in list) //Loop to add the information in the json
+                {
+                    stateList.Add(obj);
+                }
+            }
+            this.statusData.SaveState = false;
+            stateList.Add(this.statusData); //Allows you to prepare the objects for the json filling
+
+            this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+            File.WriteAllText(backupStatusFile, this.serializeObj);// Writing to the json file
+
+
+        }
 
 
     }
