@@ -9,12 +9,12 @@ namespace Easysave_v1._0_by_prosoft.model
 {
     class Model
     {
-        public int checkdatabackup;
+        public int noOfBackups;
         private string serializeObj;
         public string backupJobsFile = System.Environment.CurrentDirectory + @"\BackupJobs\";
         public string backupStatusFile = System.Environment.CurrentDirectory + @"\BackupStatus\";
         public StatusData statusData { get; set; }
-        public string NameStateFile { get; set; }
+        public string StatusFile { get; set; }
         public string BackupNameState { get; set; }
         public string SourcePath { get; set; }
         public int nbfilesmax { get; set; }
@@ -52,7 +52,7 @@ namespace Easysave_v1._0_by_prosoft.model
         }
         public void FullBackup(string srcPath, string tgtPath, bool copyDir, bool verif) //Function for full backup (CompleteSave)
         {
-            statusData = new StatusData(NameStateFile);
+            statusData = new StatusData(StatusFile);
             this.statusData.SaveState = true;//telling that the state of this backup is saved
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start(); //Starting the timer for the log file
@@ -146,7 +146,7 @@ namespace Easysave_v1._0_by_prosoft.model
         }
         public void DifferentialBackup(string srcPath, string tgtPath, string tgtPathM) // Function that allows you to make a differential backup
         {
-            statusData = new StatusData(NameStateFile); // instantiating an object for class describing the state of backup
+            statusData = new StatusData(StatusFile); // instantiating an object for class describing the state of backup
             Stopwatch stopwatch = new Stopwatch(); 
             stopwatch.Start(); //Starting the stopwatch
 
@@ -226,7 +226,7 @@ namespace Easysave_v1._0_by_prosoft.model
 
                 foreach (var obj in list) // Loop to allow filling of the JSON file
                 {
-                    if (obj.SaveName == this.NameStateFile) // comparing names to verify current and existing backup
+                    if (obj.SaveName == this.StatusFile) // comparing names to verify current and existing backup
                     {
                         obj.SourceFile = this.statusData.SourceFile;
                         obj.TargetFile = this.statusData.TargetFile;
@@ -330,9 +330,59 @@ namespace Easysave_v1._0_by_prosoft.model
 
             this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
             File.WriteAllText(backupStatusFile, this.serializeObj);// Writing to the json file
+        }
+        public void LoadSave(string backupname) //Function that allows you to load backup jobs
+        {
+            BackupJob backupjob = null;
+            this.TotalSize = 0;
+            BackupNameState = backupname;
 
+            string jsonString = File.ReadAllText(backupJobsFile); //Reading the json file
+
+
+            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
+            {
+                BackupJob[] list = JsonConvert.DeserializeObject<BackupJob[]>(jsonString);  //Derialization of the json file
+                foreach (var obj in list)
+                {
+                    if (obj.SaveName == backupname) //Check to have the correct name of the backup
+                    {
+                        backupjob = new BackupJob(obj.SaveName, obj.SourceDir, obj.TargetDir, obj.Type); //Function that allows you to retrieve information about the backup
+                    }
+                }
+            }
+
+            if (backupjob.Type == 1) //If the type is 1, it means it's a full backup
+            {
+                StatusFile = backupjob.SaveName;
+                FullBackup(backupjob.SourceDir, backupjob.TargetDir, true, false); //Calling the function to run the full backup
+                UpdateLogFile(backupjob.SaveName, backupjob.SourceDir, backupjob.TargetDir); //Call of the function to start the modifications of the log file
+                Console.WriteLine("Saved Successfull !"); //Satisfaction message display
+            }
+            else //If this is the wrong guy then, it means it's a differential backup
+            {
+                StatusFile = backupjob.SaveName;
+                DifferentialBackup(backupjob.SourceDir, backupjob.TargetDir, backupjob.TargetDir); //Calling the function to start the differential backup
+                UpdateLogFile(backupjob.SaveName, backupjob.SourceDir, backupjob.TargetDir); //Call of the function to start the modifications of the log file
+                Console.WriteLine("Saved Successfull !"); //Satisfaction message display
+            }
 
         }
+        public void CheckNoOfBackups()  // Function that allows to count the number of backups in the json file of backup jobs
+        {
+            noOfBackups = 0;
+
+            if (File.Exists(backupJobsFile)) //Check on file exists
+            {
+                string jsonString = File.ReadAllText(backupJobsFile);//Reading the json file
+                if (jsonString.Length != 0)//Checking the contents of the json file is empty or not
+                {
+                    BackupJob[] list = JsonConvert.DeserializeObject<BackupJob[]>(jsonString); //Derialization of the json file
+                    noOfBackups = list.Length; //Allows to count the number of backups
+                }
+            }
+        }
+
 
 
     }

@@ -11,15 +11,15 @@ namespace Easysave_v1._0_by_prosoft.model
         public string TargetDir { get; set; }
         public string SaveName { get; set; }
         public int Type { get; set; }
-        public string MirrorDir { get; set; }
+        
 
-        public BackupJob(string saveName, string sourceDir, string targetDir, int type, string mirrorDir)
+        public BackupJob(string saveName, string sourceDir, string targetDir, int type)
         {
             SaveName = saveName;
             SourceDir = sourceDir;
             TargetDir = targetDir;
             Type = type;
-            MirrorDir = mirrorDir;
+            
         }
     }
 }

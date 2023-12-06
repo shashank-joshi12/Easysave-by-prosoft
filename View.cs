@@ -19,7 +19,7 @@ namespace Easysave_v1._0_by_prosoft.view
             Console.WriteLine("-------------Bienvenue sur Easysave_v1.0 par Prosoft-------------");
             Console.WriteLine("Available Languages / Langues disponibles: ");
             Console.WriteLine("E : English");
-            Console.WriteLine("F : français");
+            Console.WriteLine("F : Français");
             Console.Write("Enter your Choice: ");
             languagePreference = Console.ReadLine();
             if(languagePreference != "F" || languagePreference != "E")
