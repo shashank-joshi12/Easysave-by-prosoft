@@ -19,8 +19,7 @@ namespace Easysave_v1._0_by_prosoft.model
         public string SourcePath { get; set; }
         public int nbfilesmax { get; set; }
         public int nbfiles { get; set; }
-        public long size { get; set; }
-        public float progs { get; set; }
+        public long size { get; set; }       
         public string TargetPath { get; set; }
         public string SaveName { get; set; }
         public int Type { get; set; }
@@ -75,7 +74,7 @@ namespace Easysave_v1._0_by_prosoft.model
                 nbfilesmax = 0;
                 size = 0;
                 nbfiles = 0;
-                progs = 0;
+                
 
                 foreach (FileInfo file in files) // to calculate size of files and folder
                 {
@@ -97,20 +96,14 @@ namespace Easysave_v1._0_by_prosoft.model
             {
                 string tempPath = Path.Combine(tgtPath, file.Name);
 
-                if (size > 0)
-                {
-                    progs = ((float)size / TotalSize) * 100;
-                }
+                
 
                 //Systems which allows to insert the values ​​of each file in the report file.
                 statusData.SourceFile = Path.Combine(srcPath, file.Name);
                 statusData.TargetFile = tempPath;
                 statusData.TotalSize = nbfilesmax;
                 statusData.TotalFile = TotalSize;
-                //statusData.TotalSizeRest = TotalSize - size;
-                //statusData.FileRest = nbfilesmax - nbfiles;
-                //statusData.Progress = progs;
-
+                
                 UpdateBackupStatus(); //call to update or start the file status system
 
                 file.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
@@ -134,9 +127,7 @@ namespace Easysave_v1._0_by_prosoft.model
             statusData.TargetFile = null;
             statusData.TotalFile = 0;
             statusData.TotalSize = 0;
-            //statusData.TotalSizeRest = 0;
-            //statusData.FileRest = 0;
-            //statusData.Progress = 0;
+            
             statusData.SaveState = false;
 
             UpdateBackupStatus(); //call to update or start the file status system
@@ -167,7 +158,7 @@ namespace Easysave_v1._0_by_prosoft.model
             var List1Only = (from file in list1 select file).Except(list2, _2fileCompare);
             size = 0;
             nbfiles = 0;
-            progs = 0;
+           
 
             foreach (var v in List1Only)
             {
@@ -185,9 +176,7 @@ namespace Easysave_v1._0_by_prosoft.model
                 statusData.TargetFile = tempPath;
                 statusData.TotalSize = nbfilesmax;
                 statusData.TotalFile = TotalSize;
-                //statusData.TotalSizeRest = TotalSize - size;
-                //statusData.FileRest = nbfilesmax - nbfiles;
-                //statusData.Progress = progs;
+                
 
                 UpdateBackupStatus();//call to update or start the file status system
                 v.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
@@ -200,9 +189,7 @@ namespace Easysave_v1._0_by_prosoft.model
             statusData.TargetFile = null;
             statusData.TotalFile = 0;
             statusData.TotalSize = 0;
-            //statusData.TotalSizeRest = 0;
-            //statusData.FileRest = 0;
-            //statusData.Progress = 0;
+            
             statusData.SaveState = false;
             UpdateBackupStatus();//call to update or start the file status system
 
@@ -232,9 +219,6 @@ namespace Easysave_v1._0_by_prosoft.model
                         obj.TargetFile = this.statusData.TargetFile;
                         obj.TotalFile = this.statusData.TotalFile;
                         obj.TotalSize = this.statusData.TotalSize;
-                        //obj.FileRest = this.statusData.FileRest;
-                        //obj.TotalSizeRest = this.statusData.TotalSizeRest;
-                        //obj.Progress = this.statusData.Progress;
                         obj.BackupDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
                         obj.SaveState = this.statusData.SaveState;
                     }

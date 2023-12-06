@@ -69,7 +69,7 @@ namespace Easysave_v1._0_by_prosoft.view
             {
                 Console.WriteLine("Choose the type of backup job from menu: ");
                 Console.WriteLine("0 -  Exit");
-                Console.WriteLine("1 - Complete backup");
+                Console.WriteLine("1 - Full backup");
                 Console.WriteLine("2 - differential backup");
             }
         }
@@ -88,22 +88,31 @@ namespace Easysave_v1._0_by_prosoft.view
         {
             if(languagePreference == "F")
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Veuillez saisir le chemin du répertoire source : [GLISSEZ-DÉPOSEZ VOTRE DOSSIER]");
+                Console.ResetColor();
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Please enter the path of the source directory: [DRAG AND DROP YOUR FOLDER]");
+                Console.ResetColor();
             }
         }
         public void GetTargetPath()
         {
             if(languagePreference == "F")
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Veuillez saisir le chemin du répertoire cible : [GLISSEZ-DÉPOSEZ VOTRE DOSSIER]");
+                Console.ResetColor();
             }
+
             else
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Please enter the path of the target directory: [DRAG AND DROP YOUR FOLDER]");
+                Console.ResetColor();
             }
         }
         public void ShowError(string res)
