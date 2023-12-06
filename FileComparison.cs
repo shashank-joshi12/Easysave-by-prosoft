@@ -5,9 +5,9 @@ using System.IO;
 
 namespace Easysave_v1._0_by_prosoft.model
 {
-    class FileCompare : IEqualityComparer<FileInfo>
+    class FileComparison : IEqualityComparer<FileInfo>
     {
-        public FileCompare() { }
+        public FileComparison() { }
 
         public bool Equals(FileInfo f1, FileInfo f2)
         {

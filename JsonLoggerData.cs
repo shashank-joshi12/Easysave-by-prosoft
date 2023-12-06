@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Easysave_v1._0_by_prosoft.model
 {
-    class Logstats
+    class JsonLoggerData
     {
         public string SourceDir { get; set; }
         public string TargetDir { get; set; }

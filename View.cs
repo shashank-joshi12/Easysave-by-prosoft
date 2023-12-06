@@ -15,11 +15,21 @@ namespace Easysave_v1._0_by_prosoft.view
         
         public void RunStart()
         {
-            Console.WriteLine("---------------Welcome to Easysave_v1.0 by Prosoft---------------");
-            Console.WriteLine("-------------Bienvenue sur Easysave_v1.0 par Prosoft-------------");
+            Console.WriteLine("-----------------------------------------------------------------");
+            Console.WriteLine(" ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("               Welcome to Easysave_v1.0 by Prosoft               ");
+            Console.WriteLine("             Bienvenue sur Easysave_v1.0 par Prosoft             ");
+            Console.ResetColor();
+            Console.WriteLine(" ");
+            Console.WriteLine("-----------------------------------------------------------------");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.WriteLine("Available Languages / Langues disponibles: ");
             Console.WriteLine("E : English");
             Console.WriteLine("F : Français");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine();
             Console.Write("Enter your Choice: ");
             languagePreference = Console.ReadLine();
             if(languagePreference != "F" && languagePreference != "E")

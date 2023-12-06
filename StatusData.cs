@@ -6,7 +6,7 @@ namespace Easysave_v1._0_by_prosoft.model
 {
     class StatusData
     {
-        // Declaring properties that are used for saving information for the report file in JSON
+        //Properties declaration for all variable of json status file
         public string SaveName { get; set; }
         public string BackupDate { get; set; }
         public bool SaveState { get; set; }
@@ -14,10 +14,6 @@ namespace Easysave_v1._0_by_prosoft.model
         public string TargetFile { get; set; }
         public float TotalFile { get; set; }
         public long TotalSize { get; set; }
-        public float Progress { get; set; }
-        public long FileRest { get; set; }
-        public long TotalSizeRest { get; set; }
-
         public StatusData(string saveName)
         {
             SaveName = saveName;

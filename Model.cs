@@ -107,9 +107,9 @@ namespace Easysave_v1._0_by_prosoft.model
                 statusData.TargetFile = tempPath;
                 statusData.TotalSize = nbfilesmax;
                 statusData.TotalFile = TotalSize;
-                statusData.TotalSizeRest = TotalSize - size;
-                statusData.FileRest = nbfilesmax - nbfiles;
-                statusData.Progress = progs;
+                //statusData.TotalSizeRest = TotalSize - size;
+                //statusData.FileRest = nbfilesmax - nbfiles;
+                //statusData.Progress = progs;
 
                 UpdateBackupStatus(); //call to update or start the file status system
 
@@ -134,9 +134,9 @@ namespace Easysave_v1._0_by_prosoft.model
             statusData.TargetFile = null;
             statusData.TotalFile = 0;
             statusData.TotalSize = 0;
-            statusData.TotalSizeRest = 0;
-            statusData.FileRest = 0;
-            statusData.Progress = 0;
+            //statusData.TotalSizeRest = 0;
+            //statusData.FileRest = 0;
+            //statusData.Progress = 0;
             statusData.SaveState = false;
 
             UpdateBackupStatus(); //call to update or start the file status system
@@ -162,9 +162,9 @@ namespace Easysave_v1._0_by_prosoft.model
             IEnumerable<System.IO.FileInfo> list2 = dir2.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
 
             //instantiate an object of comparator
-            FileCompare myFileCompare = new FileCompare();
+            FileComparison _2fileCompare = new FileComparison();
 
-            var List1Only = (from file in list1 select file).Except(list2, myFileCompare);
+            var List1Only = (from file in list1 select file).Except(list2, _2fileCompare);
             size = 0;
             nbfiles = 0;
             progs = 0;
@@ -185,9 +185,9 @@ namespace Easysave_v1._0_by_prosoft.model
                 statusData.TargetFile = tempPath;
                 statusData.TotalSize = nbfilesmax;
                 statusData.TotalFile = TotalSize;
-                statusData.TotalSizeRest = TotalSize - size;
-                statusData.FileRest = nbfilesmax - nbfiles;
-                statusData.Progress = progs;
+                //statusData.TotalSizeRest = TotalSize - size;
+                //statusData.FileRest = nbfilesmax - nbfiles;
+                //statusData.Progress = progs;
 
                 UpdateBackupStatus();//call to update or start the file status system
                 v.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
@@ -200,9 +200,9 @@ namespace Easysave_v1._0_by_prosoft.model
             statusData.TargetFile = null;
             statusData.TotalFile = 0;
             statusData.TotalSize = 0;
-            statusData.TotalSizeRest = 0;
-            statusData.FileRest = 0;
-            statusData.Progress = 0;
+            //statusData.TotalSizeRest = 0;
+            //statusData.FileRest = 0;
+            //statusData.Progress = 0;
             statusData.SaveState = false;
             UpdateBackupStatus();//call to update or start the file status system
 
@@ -232,9 +232,9 @@ namespace Easysave_v1._0_by_prosoft.model
                         obj.TargetFile = this.statusData.TargetFile;
                         obj.TotalFile = this.statusData.TotalFile;
                         obj.TotalSize = this.statusData.TotalSize;
-                        obj.FileRest = this.statusData.FileRest;
-                        obj.TotalSizeRest = this.statusData.TotalSizeRest;
-                        obj.Progress = this.statusData.Progress;
+                        //obj.FileRest = this.statusData.FileRest;
+                        //obj.TotalSizeRest = this.statusData.TotalSizeRest;
+                        //obj.Progress = this.statusData.Progress;
                         obj.BackupDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
                         obj.SaveState = this.statusData.SaveState;
                     }
@@ -254,7 +254,7 @@ namespace Easysave_v1._0_by_prosoft.model
             Stopwatch stopwatch = new Stopwatch();
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTaken.Hours, TimeTaken.Minutes, TimeTaken.Seconds, TimeTaken.Milliseconds / 10); //for display
 
-            Logstats logstats = new Logstats //Apply the retrieved values ​​to their classes
+            JsonLoggerData logdata = new JsonLoggerData //Apply the retrieved values ​​to their classes
             {
                 SaveName = savename,
                 SourceDir = sourcedir,
@@ -267,7 +267,7 @@ namespace Easysave_v1._0_by_prosoft.model
             string path = System.Environment.CurrentDirectory; 
             var directory = System.IO.Path.GetDirectoryName(path); 
 
-            string serializeObj = JsonConvert.SerializeObject(logstats, Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+            string serializeObj = JsonConvert.SerializeObject(logdata, Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
             File.AppendAllText(directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".json", serializeObj); //Function to write to log file
 
             stopwatch.Reset(); //resetting the stopwatch
@@ -355,16 +355,16 @@ namespace Easysave_v1._0_by_prosoft.model
             if (backupjob.Type == 1) //If the type is 1, it means it's a full backup
             {
                 StatusFile = backupjob.SaveName;
-                FullBackup(backupjob.SourceDir, backupjob.TargetDir, true, false); //Calling the function to run the full backup
-                UpdateLogFile(backupjob.SaveName, backupjob.SourceDir, backupjob.TargetDir); //Call of the function to start the modifications of the log file
-                Console.WriteLine("Saved Successfull !"); //Satisfaction message display
+                FullBackup(backupjob.SourceDir, backupjob.TargetDir, true, false); //function call for full backup
+                UpdateLogFile(backupjob.SaveName, backupjob.SourceDir, backupjob.TargetDir); //function call to update json log file
+                Console.WriteLine("Saved Successfull !"); //to display if backup successful
             }
-            else //If this is the wrong guy then, it means it's a differential backup
+            else //if it's not a full backup it's a differential backup
             {
                 StatusFile = backupjob.SaveName;
-                DifferentialBackup(backupjob.SourceDir, backupjob.TargetDir, backupjob.TargetDir); //Calling the function to start the differential backup
-                UpdateLogFile(backupjob.SaveName, backupjob.SourceDir, backupjob.TargetDir); //Call of the function to start the modifications of the log file
-                Console.WriteLine("Saved Successfull !"); //Satisfaction message display
+                DifferentialBackup(backupjob.SourceDir, backupjob.TargetDir, backupjob.TargetDir); //function call for differential backup
+                UpdateLogFile(backupjob.SaveName, backupjob.SourceDir, backupjob.TargetDir); //function call to update json log file
+                Console.WriteLine("Saved Successfull !"); // to display if backup successful
             }
 
         }
@@ -372,13 +372,13 @@ namespace Easysave_v1._0_by_prosoft.model
         {
             noOfBackups = 0;
 
-            if (File.Exists(backupJobsFile)) //Check on file exists
+            if (File.Exists(backupJobsFile)) //Check if file exists
             {
-                string jsonString = File.ReadAllText(backupJobsFile);//Reading the json file
-                if (jsonString.Length != 0)//Checking the contents of the json file is empty or not
+                string jsonString = File.ReadAllText(backupJobsFile);//Reading all the json file, getting all data in json
+                if (jsonString.Length != 0)//Checking if the retrieved data of the json file is empty or not
                 {
-                    BackupJob[] list = JsonConvert.DeserializeObject<BackupJob[]>(jsonString); //Derialization of the json file
-                    noOfBackups = list.Length; //Allows to count the number of backups
+                    BackupJob[] list = JsonConvert.DeserializeObject<BackupJob[]>(jsonString); //Deserialization of data of json into list
+                    noOfBackups = list.Length; //because jobs are stored in the log no of objects in the list = no of backup jobs
                 }
             }
         }
