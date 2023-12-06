@@ -19,41 +19,41 @@ namespace Easysave_v1._0_by_prosoft.controller
             view.RunStart(); 
             model.userMenuInput = Menu();
         }
-        private string GetSourcePath() //Function to retrieve the input from the source
+        private string GetSourcePath() //to get source path
         {
             string sourcePath = "";
             bool isValid = false;
 
-            while (!isValid) //Loop to allow verification of the path
+            while (!isValid) //Verify is path is valid while talking input
             {
-                sourcePath = Console.ReadLine(); //Retrieving user input
-                if (Directory.Exists(sourcePath.Replace("\"", ""))) //Remplace \ for ""
+                sourcePath = Console.ReadLine(); //reading user input
+                if (Directory.Exists(sourcePath.Replace("\"", ""))) 
                 {
                     isValid = true;
                 }
                 else
                 {
-                    view.ShowError("Incorect Path"); //Show error message
+                    view.ShowError("Incorect Path"); //show error if path invalid
                 }
 
             }
             return sourcePath;
         }
-        private string GetTargetPath() //Function to retrieve the input from the source
+        private string GetTargetPath() //to get target path
         {
             string targetPath = "";
             bool isValid = false;
 
             while (!isValid) //Verify is path is valid while talking input
             {
-                targetPath = Console.ReadLine(); //
+                targetPath = Console.ReadLine(); //reading user input
                 if (Directory.Exists(targetPath.Replace("\"", ""))) 
                 {
                     isValid = true;
                 }
                 else
                 {
-                    view.ShowError("Incorect Path"); //Show error message
+                    view.ShowError("Incorect Path"); //show error is path invalid
                 }
 
             }
