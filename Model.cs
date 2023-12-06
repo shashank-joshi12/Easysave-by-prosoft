@@ -147,7 +147,7 @@ namespace Easysave_v1._0_by_prosoft.model
         public void DifferentialBackup(string srcPath, string tgtPath, string tgtPathM) // Function that allows you to make a differential backup
         {
             DataState = new DataState(NameStateFile); // instantiating an object for class describing the state of backup
-            Stopwatch stopwatch = new Stopwatch(); // Instattation of the method
+            Stopwatch stopwatch = new Stopwatch(); 
             stopwatch.Start(); //Starting the stopwatch
 
             DataState.SaveState = true;
@@ -161,7 +161,7 @@ namespace Easysave_v1._0_by_prosoft.model
             IEnumerable<System.IO.FileInfo> list1 = dir1.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
             IEnumerable<System.IO.FileInfo> list2 = dir2.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
 
-            //A custom file comparer defined below  
+            //instantiate an object of comparator
             FileCompare myFileCompare = new FileCompare();
 
             var queryList1Only = (from file in list1 select file).Except(list2, myFileCompare);
@@ -208,6 +208,47 @@ namespace Easysave_v1._0_by_prosoft.model
 
             stopwatch.Stop(); //Stop the stopwatch
             this.TimeTransfert = stopwatch.Elapsed; // Transfer of the chrono time to the variable
+        }
+        private void UpdateStatefile()//Function that updates the status file.
+        {
+            List<DataState> stateList = new List<DataState>();//creating list of type DataState
+            this.serializeObj = null;
+            if (!File.Exists(stateFile)) //Checking if the file exists
+            {
+                File.Create(stateFile).Close();
+            }
+
+            string jsonString = File.ReadAllText(stateFile);  //Reading the json file
+
+            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
+            {
+                DataState[] list = JsonConvert.DeserializeObject<DataState[]>(jsonString); //Dserialization of the json file
+
+                foreach (var obj in list) // Loop to allow filling of the JSON file
+                {
+                    if (obj.SaveName == this.NameStateFile) // comparing names to verify current and existing backup
+                    {
+                        obj.SourceFile = this.DataState.SourceFile;
+                        obj.TargetFile = this.DataState.TargetFile;
+                        obj.TotalFile = this.DataState.TotalFile;
+                        obj.TotalSize = this.DataState.TotalSize;
+                        obj.FileRest = this.DataState.FileRest;
+                        obj.TotalSizeRest = this.DataState.TotalSizeRest;
+                        obj.Progress = this.DataState.Progress;
+                        obj.BackupDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                        obj.SaveState = this.DataState.SaveState;
+                    }
+
+                    stateList.Add(obj); //adds the object to the list of type DataState
+
+                }
+
+                this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+
+                File.WriteAllText(stateFile, this.serializeObj); //Predefined Function to write to JSON file
+            }
+
+
         }
 
 
