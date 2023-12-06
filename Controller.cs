@@ -12,10 +12,10 @@ namespace Easysave_v1._0_by_prosoft.controller
         private Model model;
         private View view;
         private int inputMenu;
-        public Controller()
+        public Controller()//constructor for controller
         {
-            model = new Model();
-            view = new View();
+            model = new Model();//invoking model constructor
+            view = new View();//invoking default constructor for view
             view.RunStart(); 
             model.UserMenuInput = Menu();
         }
@@ -79,7 +79,7 @@ namespace Easysave_v1._0_by_prosoft.controller
                             view.GetName(); //Display message introduction on the backup names
 
                             string jsonString = File.ReadAllText(model.backupJobsFile); //Function to read json file
-                            BackupJob[] list = JsonConvert.DeserializeObject<BackupJob[]>(jsonString); // Function to deserialize the json file
+                            BackupJob[] list = JsonConvert.DeserializeObject<BackupJob[]>(jsonString); // Function to deserialize the json file into a list 
 
                             foreach (var obj in list) //Loop to display the names of the backups
                             {

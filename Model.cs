@@ -11,7 +11,7 @@ namespace Easysave_v1._0_by_prosoft.model
     {
         public int noOfBackups;
         private string serializeObj;
-        public string backupJobsFile = System.Environment.CurrentDirectory + @"\BackupJobs\";
+        public string backupJobsFile = System.Environment.CurrentDirectory + @"\BackupJobs\";//go to current directory add append the next path
         public string backupStatusFile = System.Environment.CurrentDirectory + @"\BackupStatus\";
         public StatusData statusData { get; set; }
         public string StatusFile { get; set; }
@@ -35,17 +35,17 @@ namespace Easysave_v1._0_by_prosoft.model
         {
             UserMenuInput = " ";
 
-            if (Directory.Exists(backupJobsFile) != true) //checking if directory already exists
+            if (Directory.Exists(backupJobsFile) != true) //checking if directory for backup jobs already exists
             {
                 DirectoryInfo Dir = Directory.CreateDirectory(backupJobsFile); //if directory doesn't exist then create new directory
             }
-            backupJobsFile += @"backupJobs.json"; //create or append to JSON log
+            backupJobsFile += @"backupJobs.json"; //append to logfile
 
-            if (Directory.Exists(backupStatusFile) != true)//checking is directory already exists
+            if (Directory.Exists(backupStatusFile) != true)//checking is directory for backup status already exists
             {
-                DirectoryInfo Dir = Directory.CreateDirectory(backupStatusFile); //
+                DirectoryInfo Dir = Directory.CreateDirectory(backupStatusFile); //if directory doesn't exist then create new directory
             }
-            backupStatusFile += @"backupStatus.json"; //create a json file 
+            backupStatusFile += @"backupStatus.json"; //append to logfile 
 
 
         }
@@ -63,7 +63,7 @@ namespace Easysave_v1._0_by_prosoft.model
                 throw new DirectoryNotFoundException("Directory Not Found at source path!" + srcPath);
             }
 
-            DirectoryInfo[] dirs = dir.GetDirectories();
+            DirectoryInfo[] dirs = dir.GetDirectories();//getting subdirectories
             Directory.CreateDirectory(tgtPath); // if there's no destination folder, create it 
 
             FileInfo[] files = dir.GetFiles(); // Get the files in the directory 
@@ -145,14 +145,14 @@ namespace Easysave_v1._0_by_prosoft.model
             TotalSize = 0;
             nbfilesmax = 0;
 
-            System.IO.DirectoryInfo dir1 = new System.IO.DirectoryInfo(srcPath);
-            System.IO.DirectoryInfo dir2 = new System.IO.DirectoryInfo(tgtPath);
+            DirectoryInfo dir1 = new System.IO.DirectoryInfo(srcPath);
+            DirectoryInfo dir2 = new System.IO.DirectoryInfo(tgtPath);
 
             // Get info of both directories  
             IEnumerable<System.IO.FileInfo> list1 = dir1.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
             IEnumerable<System.IO.FileInfo> list2 = dir2.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
 
-            //instantiate an object of comparator
+            //invoking constructor of defined comparator
             FileComparison _2fileCompare = new FileComparison();
 
             var List1Only = (from file in list1 select file).Except(list2, _2fileCompare);
@@ -326,7 +326,7 @@ namespace Easysave_v1._0_by_prosoft.model
 
             if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
             {
-                BackupJob[] list = JsonConvert.DeserializeObject<BackupJob[]>(jsonString);  //Derialization of the json file
+                BackupJob[] list = JsonConvert.DeserializeObject<BackupJob[]>(jsonString);  //Deserialization of the json file into a list
                 foreach (var obj in list)
                 {
                     if (obj.SaveName == backupname) //Check to have the correct name of the backup
@@ -358,7 +358,7 @@ namespace Easysave_v1._0_by_prosoft.model
 
             if (File.Exists(backupJobsFile)) //Check if file exists
             {
-                string jsonString = File.ReadAllText(backupJobsFile);//Reading all the json file, getting all data in json
+                string jsonString = File.ReadAllText(backupJobsFile);//Reading all content of the file in path
                 if (jsonString.Length != 0)//Checking if the retrieved data of the json file is empty or not
                 {
                     BackupJob[] list = JsonConvert.DeserializeObject<BackupJob[]>(jsonString); //Deserialization of data of json into list

@@ -11,8 +11,7 @@ namespace Easysave_v1._0_by_prosoft.model
 
         public bool Equals(FileInfo f1, FileInfo f2)
         {
-            return (f1.Name == f2.Name &&
-                    f1.Length == f2.Length);
+            return (f1.Name == f2.Name && f1.Length == f2.Length);// to compare and return if both are the same or not
         }
 
 
