@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.34301.259
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Easysave_v1.0_by_prosoft", "Easysave_v1.0_by_prosoft.csproj", "{F49B792B-B439-4F8D-97E5-D7A4BFEA224A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F49B792B-B439-4F8D-97E5-D7A4BFEA224A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F49B792B-B439-4F8D-97E5-D7A4BFEA224A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F49B792B-B439-4F8D-97E5-D7A4BFEA224A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F49B792B-B439-4F8D-97E5-D7A4BFEA224A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {62065750-0AC6-4CB8-8B27-54BAD5E742EA}
+	EndGlobalSection
+EndGlobal
